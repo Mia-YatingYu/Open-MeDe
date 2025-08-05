@@ -1,0 +1,46 @@
+ROOT=/PATH/TO/OpenMeDe
+CKPT=/PATH/TO/CKPT
+
+# DATA.PATH_PREFIX   # need to replace with the path of the dataset
+# TRAIN.CLIP_ORI_PATH # need to replace with the path of CLIP weights
+
+cd $ROOT
+export PYTHONPATH=$ROOT/slowfast:$PYTHONPATH
+CUDA_VISIBLE_DEVICES=0,1,2,3 \
+  python -W ignore -u tools/run_net.py \
+  --cfg configs/Kinetics/TemporalCLIP_vitb16_8x16_STAdapter.yaml \
+  --opts DATA.PATH_TO_DATA_DIR $ROOT/label_db/weng_compress_full_splits \
+  DATA.PATH_PREFIX /data/Kinetics-400/raw/videos_se256 \
+  DATA.PATH_LABEL_SEPARATOR , \
+  DATA.INDEX_LABEL_MAPPING_FILE $ROOT/label_db/k400-index2cls.json \
+  DATA.TEXT_AUG False \
+  DATA.TEXT_AUG_FEATURE_FILE $CKPT/text_feats/classes_text_feats_k400_tpl8_xmix_ViT-B_16.pt \
+  TRAIN.ENABLE True \
+  OUTPUT_DIR $CKPT/expand_FOMAML/vitb16_8x16 \
+  TRAIN.BATCH_SIZE 64 \
+  TEST.BATCH_SIZE 128 \
+  TEST.NUM_ENSEMBLE_VIEWS 3 \
+  TEST.NUM_SPATIAL_CROPS 1 \
+  NUM_GPUS 4 \
+  SOLVER.MAX_EPOCH 22 \
+  SOLVER.WARMUP_EPOCHS 2.0 \
+  SOLVER.BASE_LR 3.33e-6 \
+  SOLVER.WARMUP_START_LR 3.33e-8 \
+  SOLVER.COSINE_END_LR 3.33e-8 \
+  TRAIN.MIXED_PRECISION True \
+  DATA.DECODING_BACKEND "pyav" \
+  MODEL.NUM_CLASSES 400 \
+  MODEL.TEMPORAL_MODELING_TYPE 'expand_temporal_view' \
+  MIXUP.ENABLE False \
+  AUG.ENABLE False \
+  AUG.NUM_SAMPLE 1 \
+  TRAIN.EVAL_PERIOD 1 \
+  TRAIN.CHECKPOINT_PERIOD 1 \
+  MODEL.LOSS_FUNC soft_cross_entropy \
+  TRAIN.LINEAR_CONNECT_CLIMB False \
+  TRAIN.CLIP_ORI_PATH /.cache/clip/ViT-B-16.pt \
+  TRAIN.CROSS_BATCH_META_LEARN True \
+  TRAIN.CROSS_BATCH_META_LEARN_RATIO 1.67e-2 \
+  TRAIN.CROSS_BATCH_META_DEBIAS False \
+  TRAIN.CROSS_BATCH_META_MIX False \
+  DATA_LOADER.NUM_WORKERS 4 \
