@@ -125,11 +125,13 @@ This repository is built upon [`OpenVCLIP`](https://github.com/wengzejia1/Open-V
 If you find this work useful, please consider citing:
 
 ```bibtex
-@article{yu2025learning,
-  title={Learning to Generalize without Bias for Open-Vocabulary Action Recognition},
-  author={Yu, Yating and Cao, Congqi and Zhang, Yifan and Zhang, Yanning},
-  journal={arXiv preprint arXiv:2502.20158},
-  year={2025}
+@InProceedings{Yu_2025_ICCV,
+    author    = {Yu, Yating and Cao, Congqi and Zhang, Yifan and Zhang, Yanning},
+    title     = {Learning to Generalize without Bias for Open-Vocabulary Action Recognition},
+    booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
+    month     = {October},
+    year      = {2025},
+    pages     = {12800-12810}
 }
 ```
 
